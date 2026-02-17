@@ -16,14 +16,14 @@ const TextareaQuestion = ({ id, question, placeholder, error, register, watch }:
   const value = watch(id) || "";
 
   return (
-    <div className="space-y-3 animate-fade-in">
-      <Label htmlFor={id} className="text-[20px] sm:text-[22px] font-bold text-carbon-900">
+    <div className="space-y-2 animate-fade-in">
+      <Label htmlFor={id} className="text-[22px] md:text-[24px] font-bold text-[#0B1220]">
         {question}
       </Label>
       <Textarea
         id={id}
         placeholder={placeholder}
-        rows={4}
+        rows={3}
         autoFocus
         {...register(id)}
         className={`rounded-xl border-[#D7DEE8] text-carbon-900 placeholder:text-carbon-text-500 focus-visible:border-carbon-green-500 focus-visible:ring-4 focus-visible:ring-[rgba(63,163,77,0.18)] ${error ? "border-destructive" : ""}`}
