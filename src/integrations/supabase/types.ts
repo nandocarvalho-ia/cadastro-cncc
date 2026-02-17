@@ -547,6 +547,71 @@ export type Database = {
         }
         Relationships: []
       }
+      onboarding_rascunhos: {
+        Row: {
+          criado_em: string
+          email: string
+          id: string
+          ref_tentado: string | null
+          respostas: Json
+          status: string
+          telefone: string | null
+        }
+        Insert: {
+          criado_em?: string
+          email: string
+          id?: string
+          ref_tentado?: string | null
+          respostas: Json
+          status?: string
+          telefone?: string | null
+        }
+        Update: {
+          criado_em?: string
+          email?: string
+          id?: string
+          ref_tentado?: string | null
+          respostas?: Json
+          status?: string
+          telefone?: string | null
+        }
+        Relationships: []
+      }
+      onboarding_tokens: {
+        Row: {
+          criado_em: string
+          expira_em: string
+          id: string
+          lead_id: string
+          token: string
+          usado_em: string | null
+        }
+        Insert: {
+          criado_em?: string
+          expira_em?: string
+          id?: string
+          lead_id: string
+          token: string
+          usado_em?: string | null
+        }
+        Update: {
+          criado_em?: string
+          expira_em?: string
+          id?: string
+          lead_id?: string
+          token?: string
+          usado_em?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "onboarding_tokens_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       respostas_onboarding: {
         Row: {
           chave_pergunta: string

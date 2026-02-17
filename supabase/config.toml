@@ -1,1 +1,7 @@
 project_id = "koucmhomqeqfmtmibblw"
+
+[functions.resolve-onboarding]
+verify_jwt = false
+
+[functions.submit-onboarding]
+verify_jwt = false
