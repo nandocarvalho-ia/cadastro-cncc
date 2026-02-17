@@ -125,12 +125,12 @@ const ConferenciaCarbonoForm = () => {
           {renderQuestion()}
         </div>
 
-        <div className="flex items-center justify-between mt-6">
+        <div className="flex items-center justify-between mt-4">
           <button
             type="button"
             onClick={goToPreviousStep}
             disabled={currentStep === 0}
-            className="flex items-center gap-1 h-12 px-4 rounded-xl text-carbon-text-500 font-medium transition-colors hover:bg-[#EEF2F7] hover:text-carbon-800 active:bg-[#E2E8F0] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+            className="flex items-center gap-1 h-[44px] px-3 rounded-[10px] text-slate-600 font-medium transition-colors hover:bg-slate-100 active:bg-[#E2E8F0] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent"
           >
             <ArrowLeft className="h-4 w-4" /> Voltar
           </button>
@@ -139,7 +139,7 @@ const ConferenciaCarbonoForm = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex items-center gap-2 h-12 px-5 rounded-xl bg-carbon-900 text-white font-bold transition-colors hover:bg-carbon-800 active:bg-carbon-700 disabled:bg-[#CBD5E1] disabled:text-[#94A3B8] disabled:cursor-not-allowed"
+              className="flex items-center gap-2 h-[44px] px-4 rounded-xl bg-carbon-900 text-white font-bold transition-all hover:bg-carbon-800 hover:-translate-y-[0.5px] active:bg-carbon-700 disabled:bg-[#CBD5E1] disabled:text-[#94A3B8] disabled:cursor-not-allowed disabled:hover:translate-y-0"
             >
               {isSubmitting ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -151,7 +151,7 @@ const ConferenciaCarbonoForm = () => {
             <button
               type="button"
               onClick={goToNextStep}
-              className="flex items-center gap-2 h-12 px-5 rounded-xl bg-carbon-900 text-white font-bold transition-colors hover:bg-carbon-800 active:bg-carbon-700"
+              className="flex items-center gap-2 h-[44px] px-4 rounded-xl bg-carbon-900 text-white font-bold transition-all hover:bg-carbon-800 hover:-translate-y-[0.5px] active:bg-carbon-700"
             >
               Próximo <ArrowRight className="h-4 w-4" />
             </button>

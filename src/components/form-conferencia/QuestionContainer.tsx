@@ -12,28 +12,19 @@ const QuestionContainer = ({ currentStep, totalSteps, children }: QuestionContai
   const progress = ((currentStep + 1) / totalSteps) * 100;
 
   return (
-    <div className="min-h-screen flex flex-col items-center bg-[#F6F8FB] px-4 py-0">
+    <div className="min-h-[100dvh] flex flex-col items-center bg-[#F6F8FB] px-4 md:px-6 py-3 md:py-4">
       <ConferenceHeroBanner />
 
-      <div className="w-full max-w-[760px]">
-        <div className="text-center mb-6">
-          <h1 className="text-[22px] sm:text-[30px] font-extrabold tracking-[0.2px] text-carbon-900 uppercase">
-            Conferência Nacional em Créditos de Carbono
-          </h1>
-          <p className="text-[15px] sm:text-base text-carbon-text-500 mt-1">
-            Responda as perguntas abaixo para nos ajudar a personalizar sua experiência.
-          </p>
-        </div>
-
-        <Card className="bg-white border-[#E7ECF3] shadow-[0_8px_24px_rgba(15,23,42,0.08)] rounded-2xl">
-          <CardHeader className="pb-3">
-            <div className="flex items-center justify-between text-xs mb-2">
-              <span className="font-medium text-carbon-text-500">Pergunta {currentStep + 1} de {totalSteps}</span>
-              <span className="font-semibold text-carbon-text-500">{Math.round(progress)}%</span>
+      <div className="w-full max-w-[980px] mx-auto flex flex-col flex-1">
+        <Card className="w-full max-w-[720px] mx-auto bg-white/[0.92] backdrop-blur-[2px] border border-slate-200/80 shadow-[0_8px_30px_rgba(2,6,23,0.08)] rounded-2xl">
+          <CardHeader className="px-4 md:px-5 pt-4 pb-2">
+            <div className="flex items-center justify-between text-[13px] mb-2">
+              <span className="font-semibold text-slate-500">Pergunta {currentStep + 1} de {totalSteps}</span>
+              <span className="font-semibold text-slate-500">{Math.round(progress)}%</span>
             </div>
-            <Progress value={progress} className="h-2" />
+            <Progress value={progress} className="h-1.5" />
           </CardHeader>
-          <CardContent className="pt-2 pb-6">
+          <CardContent className="px-4 md:px-5 pt-2 pb-4">
             {children}
           </CardContent>
         </Card>
