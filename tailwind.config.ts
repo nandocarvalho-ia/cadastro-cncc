@@ -57,6 +57,24 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        carbon: {
+          900: "hsl(var(--carbon-900))",
+          800: "hsl(var(--carbon-800))",
+          700: "hsl(var(--carbon-700))",
+        },
+        "carbon-green": {
+          600: "hsl(var(--green-600))",
+          500: "hsl(var(--green-500))",
+          100: "hsl(var(--green-100))",
+        },
+        "carbon-slate": {
+          100: "hsl(var(--slate-100))",
+          200: "hsl(var(--slate-200))",
+        },
+        "carbon-text": {
+          700: "hsl(var(--text-700))",
+          500: "hsl(var(--text-500))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -73,14 +91,14 @@ export default {
           to: { height: "0" },
         },
         "fade-in": {
-          from: { opacity: "0", transform: "translateY(8px)" },
+          from: { opacity: "0", transform: "translateY(6px)" },
           to: { opacity: "1", transform: "translateY(0)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "fade-in": "fade-in 0.3s ease-out",
+        "fade-in": "fade-in 0.22s ease-out",
       },
     },
   },

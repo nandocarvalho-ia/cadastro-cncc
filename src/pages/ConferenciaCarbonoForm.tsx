@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import QuestionContainer from "@/components/form-conferencia/QuestionContainer";
 import TextQuestion from "@/components/form-conferencia/TextQuestion";
 import TextareaQuestion from "@/components/form-conferencia/TextareaQuestion";
@@ -127,29 +126,35 @@ const ConferenciaCarbonoForm = () => {
         </div>
 
         <div className="flex items-center justify-between mt-6">
-          <Button
+          <button
             type="button"
-            variant="ghost"
-            size="sm"
             onClick={goToPreviousStep}
             disabled={currentStep === 0}
-            className="gap-1"
+            className="flex items-center gap-1 h-12 px-4 rounded-xl text-carbon-text-500 font-medium transition-colors hover:bg-[#EEF2F7] hover:text-carbon-800 active:bg-[#E2E8F0] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent"
           >
             <ArrowLeft className="h-4 w-4" /> Voltar
-          </Button>
+          </button>
 
           {isLastStep ? (
-            <Button type="submit" disabled={isSubmitting} className="gap-1">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="flex items-center gap-2 h-12 px-5 rounded-xl bg-carbon-900 text-white font-bold transition-colors hover:bg-carbon-800 active:bg-carbon-700 disabled:bg-[#CBD5E1] disabled:text-[#94A3B8] disabled:cursor-not-allowed"
+            >
               {isSubmitting ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
                 "Finalizar"
               )}
-            </Button>
+            </button>
           ) : !isAutoAdvance ? (
-            <Button type="button" onClick={goToNextStep} className="gap-1">
+            <button
+              type="button"
+              onClick={goToNextStep}
+              className="flex items-center gap-2 h-12 px-5 rounded-xl bg-carbon-900 text-white font-bold transition-colors hover:bg-carbon-800 active:bg-carbon-700"
+            >
               Próximo <ArrowRight className="h-4 w-4" />
-            </Button>
+            </button>
           ) : null}
         </div>
       </QuestionContainer>

@@ -20,9 +20,11 @@ interface SelectQuestionProps {
 const SelectQuestion = ({ id, question, options, currentValue, error, onSelect }: SelectQuestionProps) => {
   return (
     <div className="space-y-3 animate-fade-in">
-      <Label className="text-base font-medium text-foreground">{question}</Label>
+      <Label className="text-[20px] sm:text-[22px] font-bold text-carbon-900">{question}</Label>
       <Select value={currentValue || ""} onValueChange={(val) => onSelect(id, val)}>
-        <SelectTrigger className={error ? "border-destructive" : ""}>
+        <SelectTrigger
+          className={`h-[52px] rounded-xl border-[#D7DEE8] text-carbon-900 placeholder:text-carbon-text-500 focus:border-carbon-green-500 focus:ring-4 focus:ring-[rgba(63,163,77,0.18)] ${error ? "border-destructive" : ""}`}
+        >
           <SelectValue placeholder="Selecione uma opção" />
         </SelectTrigger>
         <SelectContent>
