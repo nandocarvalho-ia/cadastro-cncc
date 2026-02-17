@@ -38,6 +38,17 @@ All colors MUST be HSL.
 
     --radius: 0.5rem;
 
+    --carbon-900: 216 40% 8%;
+    --carbon-800: 218 43% 12%;
+    --carbon-700: 216 43% 19%;
+    --green-600: 122 46% 33%;
+    --green-500: 133 45% 44%;
+    --green-100: 130 38% 94%;
+    --slate-100: 210 18% 96%;
+    --slate-200: 214 18% 91%;
+    --text-700: 215 28% 27%;
+    --text-500: 215 16% 47%;
+
     --sidebar-background: 0 0% 98%;
 
     --sidebar-foreground: 240 5.3% 26.1%;

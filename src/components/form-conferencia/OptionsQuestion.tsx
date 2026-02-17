@@ -1,5 +1,4 @@
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 import { ConferenceFormData } from "@/lib/schemas/conferenciaCarbonoSchema";
 
@@ -15,23 +14,24 @@ interface OptionsQuestionProps {
 const OptionsQuestion = ({ id, question, options, currentValue, error, onSelect }: OptionsQuestionProps) => {
   return (
     <div className="space-y-3 animate-fade-in">
-      <Label className="text-base font-medium text-foreground">{question}</Label>
+      <Label className="text-[20px] sm:text-[22px] font-bold text-carbon-900">{question}</Label>
       <div className="grid gap-2">
         {options.map((option) => {
           const isSelected = currentValue === option;
           return (
-            <Button
+            <button
               key={option}
               type="button"
-              variant={isSelected ? "default" : "outline"}
-              className={`justify-start text-left h-auto py-3 px-4 whitespace-normal ${
-                isSelected ? "" : "hover:bg-accent"
-              }`}
               onClick={() => onSelect(id, option)}
+              className={`flex items-center justify-between text-left w-full py-3 px-4 rounded-xl border transition-all duration-150 cursor-pointer ${
+                isSelected
+                  ? "bg-carbon-green-100 border-carbon-green-600 text-carbon-green-600 font-medium"
+                  : "bg-white border-[#DCE3EE] text-carbon-800 hover:bg-[#F8FBF8] hover:border-carbon-green-500 hover:-translate-y-[1px]"
+              }`}
             >
-              {isSelected && <Check className="mr-2 h-4 w-4 shrink-0" />}
               <span>{option}</span>
-            </Button>
+              {isSelected && <Check className="h-4 w-4 shrink-0 ml-2" />}
+            </button>
           );
         })}
       </div>

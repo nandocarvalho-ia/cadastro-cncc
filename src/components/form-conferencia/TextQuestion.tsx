@@ -15,7 +15,7 @@ interface TextQuestionProps {
 const TextQuestion = ({ id, question, type, placeholder, error, register }: TextQuestionProps) => {
   return (
     <div className="space-y-3 animate-fade-in">
-      <Label htmlFor={id} className="text-base font-medium text-foreground">
+      <Label htmlFor={id} className="text-[20px] sm:text-[22px] font-bold text-carbon-900">
         {question}
       </Label>
       <Input
@@ -24,7 +24,7 @@ const TextQuestion = ({ id, question, type, placeholder, error, register }: Text
         placeholder={placeholder}
         autoFocus
         {...register(id)}
-        className={error ? "border-destructive" : ""}
+        className={`h-[52px] rounded-xl border-[#D7DEE8] text-carbon-900 placeholder:text-carbon-text-500 focus-visible:border-carbon-green-500 focus-visible:ring-4 focus-visible:ring-[rgba(63,163,77,0.18)] ${error ? "border-destructive" : ""}`}
       />
       {error && <p className="text-sm text-destructive">{error}</p>}
     </div>

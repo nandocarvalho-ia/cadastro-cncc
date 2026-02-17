@@ -17,7 +17,7 @@ const TextareaQuestion = ({ id, question, placeholder, error, register, watch }:
 
   return (
     <div className="space-y-3 animate-fade-in">
-      <Label htmlFor={id} className="text-base font-medium text-foreground">
+      <Label htmlFor={id} className="text-[20px] sm:text-[22px] font-bold text-carbon-900">
         {question}
       </Label>
       <Textarea
@@ -26,7 +26,7 @@ const TextareaQuestion = ({ id, question, placeholder, error, register, watch }:
         rows={4}
         autoFocus
         {...register(id)}
-        className={error ? "border-destructive" : ""}
+        className={`rounded-xl border-[#D7DEE8] text-carbon-900 placeholder:text-carbon-text-500 focus-visible:border-carbon-green-500 focus-visible:ring-4 focus-visible:ring-[rgba(63,163,77,0.18)] ${error ? "border-destructive" : ""}`}
       />
       <div className="flex items-center justify-between">
         {error ? (
@@ -34,7 +34,7 @@ const TextareaQuestion = ({ id, question, placeholder, error, register, watch }:
         ) : (
           <span />
         )}
-        <span className="text-xs text-muted-foreground">{value.length} caracteres</span>
+        <span className="text-xs text-carbon-text-500">{value.length} caracteres</span>
       </div>
     </div>
   );
