@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const conferenceSchema = z.object({
   email: z.string().email("Digite um e-mail válido"),
+  telefone: z.string().optional(),
   genero: z.string().min(1, "Campo obrigatório"),
   faixaEtaria: z.string().min(1, "Campo obrigatório"),
   estado: z.string().min(1, "Campo obrigatório"),
@@ -25,6 +26,7 @@ export interface Question {
   type: QuestionType;
   placeholder?: string;
   options?: string[];
+  conditional?: boolean;
 }
 
 export const QUESTIONS: Question[] = [
@@ -33,6 +35,13 @@ export const QUESTIONS: Question[] = [
     question: "E-mail",
     type: "email",
     placeholder: "Seu e-mail",
+  },
+  {
+    id: "telefone",
+    question: "Para confirmar sua identidade, informe seu telefone:",
+    type: "text",
+    placeholder: "Seu telefone com DDD",
+    conditional: true,
   },
   {
     id: "genero",
