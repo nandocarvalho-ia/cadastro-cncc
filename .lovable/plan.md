@@ -1,88 +1,91 @@
 
 
-## Refinamento Visual — Tema Carbono
+## Visual v2 — Premium Clean
 
-Ajustes puramente visuais/estilizacao. Nenhuma alteracao em logica, validacao, schema ou rotas.
+Ajustes puramente visuais. Nenhuma alteracao em logica, validacao, schema, rotas ou navegacao.
 
 ---
 
-### Arquivos envolvidos
+### Arquivos alterados
 
-| Arquivo | O que muda |
+| Arquivo | Mudanca |
 |---|---|
-| `src/assets/banner-conferencia.png` | Imagem do banner copiada para o projeto |
-| `src/components/form-conferencia/ConferenceHeroBanner.tsx` | Novo componente de banner |
-| `src/index.css` | Tokens de cor carbono + background geral + estilos de card/input/progress |
-| `src/components/form-conferencia/QuestionContainer.tsx` | Banner no topo, max-w ampliado para 760px, tipografia refinada, progress bar customizada |
-| `src/components/form-conferencia/TextQuestion.tsx` | Classes de estilo nos inputs (h-[52px], rounded-xl, focus ring verde, cores) |
-| `src/components/form-conferencia/TextareaQuestion.tsx` | Mesmas classes de estilo do input |
-| `src/components/form-conferencia/SelectQuestion.tsx` | Trigger com h-[52px], rounded-xl, focus ring verde |
-| `src/components/form-conferencia/OptionsQuestion.tsx` | Estilo dos botoes de opcao: fundo branco, borda, hover verde, selecionado verde, microinteracao translateY |
-| `src/pages/ConferenciaCarbonoForm.tsx` | Botoes Voltar/Proximo/Finalizar com estilos refinados (h-12, rounded-xl, cores carbon) |
-| `src/pages/ConferenciaCarbonoSucesso.tsx` | Banner no topo, icone check em circulo verde, botoes com estilo harmonizado |
-| `src/components/ui/progress.tsx` | Progress bar com h-2 por padrao, gradiente carbon-to-green, transicao suave |
+| `ConferenceHeroBanner.tsx` | Banner compacto (100/130/170px), overlay 10%, margens menores |
+| `QuestionContainer.tsx` | Remove titulo duplicado, layout min-h-[100dvh], card compacto max-w-[720px], glass clean, progress 6px, padding tight |
+| `TextQuestion.tsx` | Input h-[46px], fonte menor |
+| `TextareaQuestion.tsx` | Textarea rows 3, fonte menor |
+| `SelectQuestion.tsx` | Trigger h-[46px] |
+| `OptionsQuestion.tsx` | Padding e fonte menores, scroll interno max-h-[34vh]/[38vh] para listas longas |
+| `ConferenciaCarbonoForm.tsx` | Botoes h-[44px], mt-4, microanimacao hover |
+| `ConferenciaCarbonoSucesso.tsx` | Layout min-h-[100dvh] centralizado, card compacto, botoes h-[44px], sem titulo duplicado |
+| `progress.tsx` | Altura 6px |
 
 ---
 
-### Detalhes tecnicos
+### Detalhes por componente
 
-#### 1. Banner
-- Copiar imagem para `src/assets/banner-conferencia.png`
-- Componente `ConferenceHeroBanner`: img com `w-full max-w-[1280px] rounded-[20px] object-cover` + overlay escuro via pseudo-elemento ou div absoluta com `bg-black/[0.14]`
-- Alturas responsivas: `h-[140px] sm:h-[220px] lg:h-[300px]`
-- Margens: `mt-5 lg:mt-7 mb-6`
+#### 1. ConferenceHeroBanner
+- Alturas: `h-[100px] sm:h-[130px] lg:h-[170px]`
+- Overlay: `bg-black/[0.10]`
+- Margens: `mt-3 lg:mt-4 mb-3 md:mb-4`
+- Manter rounded-2xl, object-cover, max-w-[1280px]
 
-#### 2. Tokens CSS (index.css)
-Adicionar variaveis CSS customizadas no `:root`:
-```
---carbon-900: 216 40% 8%;
---carbon-800: 218 43% 12%;
---carbon-700: 216 43% 19%;
---green-600: 122 46% 33%;
---green-500: 133 45% 44%;
---green-100: 130 38% 94%;
---slate-100: 210 18% 96%;
---slate-200: 214 18% 91%;
---text-700: 215 28% 27%;
---text-500: 215 16% 47%;
-```
-Cores em HSL para compatibilidade com o sistema existente.
+#### 2. QuestionContainer
+- Wrapper externo: `min-h-[100dvh] flex flex-col items-center bg-[#F6F8FB] px-4 md:px-6 py-3 md:py-4`
+- Remover bloco do titulo h1 e subtitulo (linhas 19-26) — ja esta no banner
+- Container interno: `w-full max-w-[980px] mx-auto flex flex-col flex-1`
+- Card: `w-full max-w-[720px] mx-auto bg-white/[0.92] backdrop-blur-[2px] border border-slate-200/80 shadow-[0_8px_30px_rgba(2,6,23,0.08)] rounded-2xl`
+- CardHeader: padding compacto `px-4 md:px-5 pt-4 pb-2`
+- "Pergunta X de Y" e percentual: `text-[13px] font-semibold text-slate-500`
+- Progress: `h-1.5` (6px)
+- CardContent: `px-4 md:px-5 pt-2 pb-4`
 
-Background geral das paginas de conferencia: `bg-[#F6F8FB]` (via classe Tailwind inline).
+#### 3. Pergunta (label em todos os question components)
+- `text-[22px] md:text-[24px] font-bold text-[#0B1220]`
+- `space-y-2` em vez de `space-y-3`
 
-#### 3. Card do formulario
-- `bg-white border-[#E7ECF3] shadow-[0_8px_24px_rgba(15,23,42,0.08)] rounded-2xl`
+#### 4. TextQuestion
+- Input: `h-[46px]` (em vez de 52px)
+- Manter focus ring e cores
 
-#### 4. Tipografia
-- Titulo principal: `text-[22px] sm:text-[30px] font-extrabold tracking-[0.2px]` cor carbon-900
-- Subtitulo: cor text-500, `text-[15px] sm:text-base`
-- Label da pergunta: `text-[20px] sm:text-[22px] font-bold` cor carbon-900
-- "Pergunta X de Y": font-medium cor text-500
-- Percentual: font-semibold cor text-500
+#### 5. TextareaQuestion
+- `rows={3}` (em vez de 4) para economizar espaco
 
-#### 5. Barra de progresso
-- Modificar `Progress` component: trilho h-2 com bg slate-200 rounded-full
-- Indicador com `background: linear-gradient(to right, #1A2A45, #2E7D32)` e `transition: transform 0.35s ease`
+#### 6. SelectQuestion
+- Trigger: `h-[46px]`
 
-#### 6. Campos
-- Input/Textarea/SelectTrigger: `h-[52px] rounded-xl border-[#D7DEE8]` + focus: `border-[#3FA34D] ring-4 ring-[rgba(63,163,77,0.18)]` + placeholder text-500 + text carbon-900
+#### 7. OptionsQuestion
+- Botoes: `py-2.5 md:py-3 px-3.5` (menores)
+- Texto: `text-[14px] md:text-[15px] leading-snug`
+- Grid: `gap-1.5`
+- Wrapper com scroll interno: `max-h-[34vh] md:max-h-[38vh] overflow-y-auto pr-1`
+- Manter estados hover/selected/check
 
-#### 7. Botoes de opcao
-- Padrao: `bg-white border-[#DCE3EE] text-[#111B2E] rounded-xl`
-- Hover: `bg-[#F8FBF8] border-[#3FA34D] -translate-y-[1px]`
-- Selecionado: `bg-[#EAF6EC] border-[#2E7D32] text-[#2E7D32]` com check icon
-
-#### 8. Botoes de navegacao
-- Proximo/Finalizar: `h-12 px-5 rounded-xl bg-[#0B1220] text-white font-bold hover:bg-[#111B2E] active:bg-[#1A2A45]`
-- Disabled: `bg-[#CBD5E1] text-[#94A3B8]`
-- Voltar: ghost com `text-[#64748B] hover:bg-[#EEF2F7] hover:text-[#111B2E] active:bg-[#E2E8F0] rounded-xl`
+#### 8. Botoes de navegacao (ConferenciaCarbonoForm)
+- Container: `mt-4` (em vez de mt-6)
+- Primario (Proximo/Finalizar): `h-[44px] px-4 rounded-xl font-bold hover:-translate-y-[0.5px] transition-all`
+- Secundario (Voltar): `h-[44px] px-3 rounded-[10px] text-slate-600 hover:bg-slate-100`
+- Disabled: manter contraste e cursor
 
 #### 9. Pagina de sucesso
-- Banner no topo (mesmo componente)
-- Check icon dentro de circulo `bg-[#EAF6EC]` com icone `text-[#2E7D32]`
-- Card com mesma linguagem visual
-- CTA primario com estilo carbon
-- CTA secundario com borda verde suave
+- Wrapper: `min-h-[100dvh] flex flex-col items-center bg-[#F6F8FB] px-4 md:px-6 py-3 md:py-4`
+- Banner compacto (mesmo componente)
+- Card: `w-full max-w-[420px] mx-auto` com mesma linguagem glass clean
+- Icone check: `w-14 h-14` (ligeiramente menor), `mb-3`
+- Botoes: `h-[44px]`
+- Reduzir espacamentos internos
 
-#### 10. Animacao de entrada
-- Atualizar keyframe fade-in para `translateY(6px)` com duracao 220ms
+#### 10. Progress bar
+- Mudar className default de `h-2` para `h-1.5` no componente
+
+---
+
+### Resumo do impacto
+
+- Banner 40-45% menor em altura, liberando area para o formulario
+- Titulo duplicado removido
+- Card mais compacto com padding tight e glass clean
+- Campos e opcoes menores, com scroll interno para listas longas
+- Botoes 44px em vez de 48px
+- Maioria das perguntas cabe na viewport sem scroll da pagina
+- Zero alteracoes em logica, validacao ou navegacao
