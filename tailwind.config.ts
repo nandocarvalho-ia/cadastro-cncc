@@ -66,6 +66,7 @@ export default {
           600: "hsl(var(--green-600))",
           500: "hsl(var(--green-500))",
           100: "hsl(var(--green-100))",
+          DEFAULT: "hsl(var(--green-600))",
         },
         "carbon-slate": {
           100: "hsl(var(--slate-100))",

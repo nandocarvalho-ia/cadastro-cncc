@@ -33,7 +33,8 @@ const ConferenciaCarbonoForm = () => {
     formState: { errors },
   } = useForm<ConferenceFormData>({
     resolver: zodResolver(conferenceSchema),
-    mode: "onTouched",
+    mode: "onBlur",
+    reValidateMode: "onChange",
   });
 
   // Build active questions list — filter conditional questions based on resolution state
@@ -46,8 +47,10 @@ const ConferenciaCarbonoForm = () => {
     });
   }, [resolution.needsPhone]);
 
-  const question = activeQuestions[currentStep];
-  const isLastStep = currentStep === activeQuestions.length - 1;
+  // Guard: clamp currentStep within valid range (protects against stale state when activeQuestions changes)
+  const safeStep = Math.min(currentStep, Math.max(0, activeQuestions.length - 1));
+  const question = activeQuestions[safeStep];
+  const isLastStep = safeStep === activeQuestions.length - 1;
   const isAutoAdvance = question?.type === "options" || question?.type === "select";
 
   const handlePostEmailResolution = async () => {
@@ -213,8 +216,8 @@ const ConferenciaCarbonoForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <QuestionContainer currentStep={currentStep} totalSteps={activeQuestions.length}>
-        <div key={currentStep}>
+      <QuestionContainer currentStep={safeStep} totalSteps={activeQuestions.length}>
+        <div key={safeStep}>
           {renderQuestion()}
         </div>
 
@@ -241,8 +244,8 @@ const ConferenciaCarbonoForm = () => {
           <button
             type="button"
             onClick={goToPreviousStep}
-            disabled={currentStep === 0}
-            className="flex items-center gap-1 h-[44px] px-3 rounded-[10px] text-slate-600 font-medium transition-colors hover:bg-slate-100 active:bg-[#E2E8F0] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+            disabled={safeStep === 0}
+            className="flex items-center gap-1 h-[44px] px-3 rounded-[10px] text-carbon-text-500 font-medium transition-colors hover:bg-carbon-slate-100 active:bg-carbon-slate-200 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent"
           >
             <ArrowLeft className="h-4 w-4" /> Voltar
           </button>
@@ -251,7 +254,7 @@ const ConferenciaCarbonoForm = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex items-center gap-2 h-[44px] px-4 rounded-xl bg-carbon-900 text-white font-bold transition-all hover:bg-carbon-800 hover:-translate-y-[0.5px] active:bg-carbon-700 disabled:bg-[#CBD5E1] disabled:text-[#94A3B8] disabled:cursor-not-allowed disabled:hover:translate-y-0"
+              className="flex items-center gap-2 h-[44px] px-4 rounded-xl bg-carbon-900 text-white font-bold transition-all hover:bg-carbon-800 hover:-translate-y-[0.5px] active:bg-carbon-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
             >
               {isSubmitting ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -264,7 +267,7 @@ const ConferenciaCarbonoForm = () => {
               type="button"
               onClick={goToNextStep}
               disabled={resolution.status === "resolving"}
-              className="flex items-center gap-2 h-[44px] px-4 rounded-xl bg-carbon-900 text-white font-bold transition-all hover:bg-carbon-800 hover:-translate-y-[0.5px] active:bg-carbon-700 disabled:bg-[#CBD5E1] disabled:text-[#94A3B8] disabled:cursor-not-allowed"
+              className="flex items-center gap-2 h-[44px] px-4 rounded-xl bg-carbon-900 text-white font-bold transition-all hover:bg-carbon-800 hover:-translate-y-[0.5px] active:bg-carbon-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {resolution.status === "resolving" ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
