@@ -14,6 +14,120 @@ export type Database = {
   }
   public: {
     Tables: {
+      catalogo_ofertas_henrique: {
+        Row: {
+          ativo: boolean | null
+          bonus: Json | null
+          created_at: string
+          email_suporte: string | null
+          ficha_aluno_link: string | null
+          fim_publicacao: string | null
+          grupo_whatsapp: string | null
+          id: number
+          idioma: string | null
+          inicio_publicacao: string | null
+          knowledge_payload: Json | null
+          link_checkout: string | null
+          link_evento_youtube: string | null
+          link_ingressos: string | null
+          link_pagina_vendas: string | null
+          link_stripe: string | null
+          link_whatsapp_suporte: string | null
+          lista_tag: string | null
+          moeda: string | null
+          nome_oferta: string | null
+          observacoes_internas: string | null
+          oferta_key: string | null
+          permitir_duvidas_pre_evento: boolean | null
+          permitir_venda_direta: boolean | null
+          pesquisa_link: string | null
+          playbook_resumo: string | null
+          preco_texto: string | null
+          produto_id_hotmart: string | null
+          produto_principal: string | null
+          redirect_contato_link: string | null
+          redirect_youtube_link: string | null
+          regiao: string | null
+          tipo_oferta: string | null
+          tutorial_link: string | null
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean | null
+          bonus?: Json | null
+          created_at?: string
+          email_suporte?: string | null
+          ficha_aluno_link?: string | null
+          fim_publicacao?: string | null
+          grupo_whatsapp?: string | null
+          id?: number
+          idioma?: string | null
+          inicio_publicacao?: string | null
+          knowledge_payload?: Json | null
+          link_checkout?: string | null
+          link_evento_youtube?: string | null
+          link_ingressos?: string | null
+          link_pagina_vendas?: string | null
+          link_stripe?: string | null
+          link_whatsapp_suporte?: string | null
+          lista_tag?: string | null
+          moeda?: string | null
+          nome_oferta?: string | null
+          observacoes_internas?: string | null
+          oferta_key?: string | null
+          permitir_duvidas_pre_evento?: boolean | null
+          permitir_venda_direta?: boolean | null
+          pesquisa_link?: string | null
+          playbook_resumo?: string | null
+          preco_texto?: string | null
+          produto_id_hotmart?: string | null
+          produto_principal?: string | null
+          redirect_contato_link?: string | null
+          redirect_youtube_link?: string | null
+          regiao?: string | null
+          tipo_oferta?: string | null
+          tutorial_link?: string | null
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean | null
+          bonus?: Json | null
+          created_at?: string
+          email_suporte?: string | null
+          ficha_aluno_link?: string | null
+          fim_publicacao?: string | null
+          grupo_whatsapp?: string | null
+          id?: number
+          idioma?: string | null
+          inicio_publicacao?: string | null
+          knowledge_payload?: Json | null
+          link_checkout?: string | null
+          link_evento_youtube?: string | null
+          link_ingressos?: string | null
+          link_pagina_vendas?: string | null
+          link_stripe?: string | null
+          link_whatsapp_suporte?: string | null
+          lista_tag?: string | null
+          moeda?: string | null
+          nome_oferta?: string | null
+          observacoes_internas?: string | null
+          oferta_key?: string | null
+          permitir_duvidas_pre_evento?: boolean | null
+          permitir_venda_direta?: boolean | null
+          pesquisa_link?: string | null
+          playbook_resumo?: string | null
+          preco_texto?: string | null
+          produto_id_hotmart?: string | null
+          produto_principal?: string | null
+          redirect_contato_link?: string | null
+          redirect_youtube_link?: string | null
+          regiao?: string | null
+          tipo_oferta?: string | null
+          tutorial_link?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ciclos_campanha: {
         Row: {
           atualizado_em: string
@@ -144,6 +258,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compras_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "v_leads_crm"
             referencedColumns: ["id"]
           },
           {
@@ -289,6 +410,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "entradas_funil_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "v_leads_crm"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "entradas_funil_oferta_id_fkey"
             columns: ["oferta_id"]
             isOneToOne: false
@@ -352,6 +480,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "followups_henrique_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "v_leads_crm"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "followups_henrique_sugestao_followup_id_fkey"
             columns: ["sugestao_followup_id"]
             isOneToOne: false
@@ -405,10 +540,18 @@ export type Database = {
             referencedRelation: "leads"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "interacoes_lead_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "v_leads_crm"
+            referencedColumns: ["id"]
+          },
         ]
       }
       leads: {
         Row: {
+          acao_sugerida: string | null
           atualizado_em: string
           cidade: string | null
           criado_em: string
@@ -417,19 +560,28 @@ export type Database = {
           email: string | null
           estado: string | null
           flag_henrique_ativo: boolean
+          funnel_stage: string
           id: string
           idioma_preferencial: string | null
+          interesse_duvida: string | null
+          main_desires: string | null
+          main_objections: string | null
+          main_pain_points: string | null
           nao_contatar: boolean
           nome_completo: string | null
           origem_principal: string | null
           pontuacao_mql: number
           primeiro_nome: string | null
+          probabilidade_conversao: number | null
+          recebeu_link: string | null
           status_relacionamento: string | null
           telefone: string
           temperatura_lead: string | null
           ultimos_8: string | null
+          user_profile: string | null
         }
         Insert: {
+          acao_sugerida?: string | null
           atualizado_em?: string
           cidade?: string | null
           criado_em?: string
@@ -438,19 +590,28 @@ export type Database = {
           email?: string | null
           estado?: string | null
           flag_henrique_ativo?: boolean
+          funnel_stage?: string
           id?: string
           idioma_preferencial?: string | null
+          interesse_duvida?: string | null
+          main_desires?: string | null
+          main_objections?: string | null
+          main_pain_points?: string | null
           nao_contatar?: boolean
           nome_completo?: string | null
           origem_principal?: string | null
           pontuacao_mql?: number
           primeiro_nome?: string | null
+          probabilidade_conversao?: number | null
+          recebeu_link?: string | null
           status_relacionamento?: string | null
           telefone: string
           temperatura_lead?: string | null
           ultimos_8?: string | null
+          user_profile?: string | null
         }
         Update: {
+          acao_sugerida?: string | null
           atualizado_em?: string
           cidade?: string | null
           criado_em?: string
@@ -459,17 +620,232 @@ export type Database = {
           email?: string | null
           estado?: string | null
           flag_henrique_ativo?: boolean
+          funnel_stage?: string
           id?: string
           idioma_preferencial?: string | null
+          interesse_duvida?: string | null
+          main_desires?: string | null
+          main_objections?: string | null
+          main_pain_points?: string | null
           nao_contatar?: boolean
           nome_completo?: string | null
           origem_principal?: string | null
           pontuacao_mql?: number
           primeiro_nome?: string | null
+          probabilidade_conversao?: number | null
+          recebeu_link?: string | null
           status_relacionamento?: string | null
           telefone?: string
           temperatura_lead?: string | null
           ultimos_8?: string | null
+          user_profile?: string | null
+        }
+        Relationships: []
+      }
+      leads_LC_JAN26: {
+        Row: {
+          acao_sugerida: string | null
+          ai_blocked: boolean | null
+          ai_blocked_at: string | null
+          ai_blocked_reason: string | null
+          api_oficial: boolean
+          area_atuacao: string | null
+          conhecimento_previo_carbono: string | null
+          conversion_probability: number | null
+          created_at: string | null
+          dor_principal: string | null
+          email: string | null
+          enquadramento_profissional: string | null
+          estado: string | null
+          evento_recuperacao: string | null
+          faixa_etaria: string | null
+          faixa_renda: string | null
+          forma_pagamento: string | null
+          funnel_stage: string | null
+          human_agent_id: string | null
+          human_agent_name: string | null
+          icp_classification: string | null
+          indicacao_motivo: string | null
+          instancia: string | null
+          interaction_score: number | null
+          interesse_duvida: string | null
+          last_8: string | null
+          last_interaction_at: string | null
+          lead_classification: string | null
+          lead_profile_type: string | null
+          lead_stage: string | null
+          link_sent_at: string | null
+          lost_at: string | null
+          lost_reason: string | null
+          lost_reason_detail: string | null
+          main_desires: string | null
+          main_objections: string | null
+          main_pain_points: string | null
+          pesquisa_respondida: boolean | null
+          pesquisa_respondida_at: string | null
+          produto_indicado: string | null
+          proximo_followup: string | null
+          purchase_value: number | null
+          purchased_at: string | null
+          recebeu_link: string | null
+          regiao: string | null
+          sexo: string | null
+          stage_changed_at: string | null
+          stage_changed_by: string | null
+          status_compra: string | null
+          tempo_conhece_sanquetta: string | null
+          total_messages: number | null
+          ultimo_followup: string | null
+          updated_at: string | null
+          user_name: string | null
+          user_number: string
+          user_profile: string | null
+          viu_live: boolean | null
+        }
+        Insert: {
+          acao_sugerida?: string | null
+          ai_blocked?: boolean | null
+          ai_blocked_at?: string | null
+          ai_blocked_reason?: string | null
+          api_oficial?: boolean
+          area_atuacao?: string | null
+          conhecimento_previo_carbono?: string | null
+          conversion_probability?: number | null
+          created_at?: string | null
+          dor_principal?: string | null
+          email?: string | null
+          enquadramento_profissional?: string | null
+          estado?: string | null
+          evento_recuperacao?: string | null
+          faixa_etaria?: string | null
+          faixa_renda?: string | null
+          forma_pagamento?: string | null
+          funnel_stage?: string | null
+          human_agent_id?: string | null
+          human_agent_name?: string | null
+          icp_classification?: string | null
+          indicacao_motivo?: string | null
+          instancia?: string | null
+          interaction_score?: number | null
+          interesse_duvida?: string | null
+          last_8?: string | null
+          last_interaction_at?: string | null
+          lead_classification?: string | null
+          lead_profile_type?: string | null
+          lead_stage?: string | null
+          link_sent_at?: string | null
+          lost_at?: string | null
+          lost_reason?: string | null
+          lost_reason_detail?: string | null
+          main_desires?: string | null
+          main_objections?: string | null
+          main_pain_points?: string | null
+          pesquisa_respondida?: boolean | null
+          pesquisa_respondida_at?: string | null
+          produto_indicado?: string | null
+          proximo_followup?: string | null
+          purchase_value?: number | null
+          purchased_at?: string | null
+          recebeu_link?: string | null
+          regiao?: string | null
+          sexo?: string | null
+          stage_changed_at?: string | null
+          stage_changed_by?: string | null
+          status_compra?: string | null
+          tempo_conhece_sanquetta?: string | null
+          total_messages?: number | null
+          ultimo_followup?: string | null
+          updated_at?: string | null
+          user_name?: string | null
+          user_number: string
+          user_profile?: string | null
+          viu_live?: boolean | null
+        }
+        Update: {
+          acao_sugerida?: string | null
+          ai_blocked?: boolean | null
+          ai_blocked_at?: string | null
+          ai_blocked_reason?: string | null
+          api_oficial?: boolean
+          area_atuacao?: string | null
+          conhecimento_previo_carbono?: string | null
+          conversion_probability?: number | null
+          created_at?: string | null
+          dor_principal?: string | null
+          email?: string | null
+          enquadramento_profissional?: string | null
+          estado?: string | null
+          evento_recuperacao?: string | null
+          faixa_etaria?: string | null
+          faixa_renda?: string | null
+          forma_pagamento?: string | null
+          funnel_stage?: string | null
+          human_agent_id?: string | null
+          human_agent_name?: string | null
+          icp_classification?: string | null
+          indicacao_motivo?: string | null
+          instancia?: string | null
+          interaction_score?: number | null
+          interesse_duvida?: string | null
+          last_8?: string | null
+          last_interaction_at?: string | null
+          lead_classification?: string | null
+          lead_profile_type?: string | null
+          lead_stage?: string | null
+          link_sent_at?: string | null
+          lost_at?: string | null
+          lost_reason?: string | null
+          lost_reason_detail?: string | null
+          main_desires?: string | null
+          main_objections?: string | null
+          main_pain_points?: string | null
+          pesquisa_respondida?: boolean | null
+          pesquisa_respondida_at?: string | null
+          produto_indicado?: string | null
+          proximo_followup?: string | null
+          purchase_value?: number | null
+          purchased_at?: string | null
+          recebeu_link?: string | null
+          regiao?: string | null
+          sexo?: string | null
+          stage_changed_at?: string | null
+          stage_changed_by?: string | null
+          status_compra?: string | null
+          tempo_conhece_sanquetta?: string | null
+          total_messages?: number | null
+          ultimo_followup?: string | null
+          updated_at?: string | null
+          user_name?: string | null
+          user_number?: string
+          user_profile?: string | null
+          viu_live?: boolean | null
+        }
+        Relationships: []
+      }
+      logs_decisoes_henrique: {
+        Row: {
+          created_at: string
+          ferramenta: string | null
+          id: number
+          input_enviado: string | null
+          output_recebido: Json | null
+          session_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          ferramenta?: string | null
+          id?: number
+          input_enviado?: string | null
+          output_recebido?: Json | null
+          session_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          ferramenta?: string | null
+          id?: number
+          input_enviado?: string | null
+          output_recebido?: Json | null
+          session_id?: string | null
         }
         Relationships: []
       }
@@ -507,6 +883,27 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      n8n_chat_unificado: {
+        Row: {
+          id: number
+          message: Json
+          session_id: string
+          updated_at: string
+        }
+        Insert: {
+          id?: number
+          message: Json
+          session_id: string
+          updated_at?: string
+        }
+        Update: {
+          id?: number
+          message?: Json
+          session_id?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       ofertas: {
         Row: {
@@ -610,6 +1007,13 @@ export type Database = {
             referencedRelation: "leads"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "onboarding_tokens_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "v_leads_crm"
+            referencedColumns: ["id"]
+          },
         ]
       }
       respostas_onboarding: {
@@ -670,6 +1074,13 @@ export type Database = {
             referencedRelation: "leads"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "respostas_onboarding_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "v_leads_crm"
+            referencedColumns: ["id"]
+          },
         ]
       }
       sugestoes_followup: {
@@ -714,10 +1125,37 @@ export type Database = {
             referencedRelation: "leads"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "sugestoes_followup_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "v_leads_crm"
+            referencedColumns: ["id"]
+          },
         ]
       }
     }
     Views: {
+      v_leads_crm: {
+        Row: {
+          acao_sugerida: string | null
+          compras: Json | null
+          data_primeira_entrada: string | null
+          data_ultima_interacao: string | null
+          entradas_funil: Json | null
+          id: string | null
+          interesse_duvida: string | null
+          main_desires: string | null
+          main_objections: string | null
+          main_pain_points: string | null
+          nome_completo: string | null
+          pontuacao_mql: number | null
+          telefone: string | null
+          temperatura_lead: string | null
+          user_profile: string | null
+        }
+        Relationships: []
+      }
       vw_onboarding_respostas_amigavel: {
         Row: {
           area_atuacao: string | null
@@ -745,6 +1183,13 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "respostas_onboarding_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "v_leads_crm"
             referencedColumns: ["id"]
           },
         ]
