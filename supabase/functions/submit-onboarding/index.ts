@@ -7,6 +7,26 @@ const corsHeaders = {
 };
 
 const VERSAO_FORMULARIO = "cncc-v2";
+const WEBHOOK_URL = "https://n8n-n8n.frxa1g.easypanel.host/webhook/qualifica-lead-onboarding";
+
+async function notifyWebhook(payload: {
+  telefone: string | null;
+  email: string;
+  lead_id: string | null;
+  status: string;
+  origem_vinculo: string | null;
+  confianca: string | null;
+}) {
+  try {
+    await fetch(WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+  } catch (e) {
+    console.error("Webhook notify failed:", e);
+  }
+}
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -119,6 +139,8 @@ Deno.serve(async (req) => {
         );
       }
 
+      notifyWebhook({ telefone: telefone || null, email, lead_id: resolvedLeadId, status: "saved", origem_vinculo: origemVinculo, confianca });
+
       return new Response(
         JSON.stringify({ status: "saved", lead_id: resolvedLeadId, origem_vinculo: origemVinculo, confianca }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -142,6 +164,8 @@ Deno.serve(async (req) => {
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
+
+    notifyWebhook({ telefone: telefone || null, email, lead_id: null, status: "draft_saved", origem_vinculo: null, confianca: null });
 
     return new Response(
       JSON.stringify({
