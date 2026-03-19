@@ -1,7 +1,8 @@
 import { useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { getVariantFromPath, getSuccessPath } from "@/lib/getVariantFromPath";
 import { ArrowLeft, ArrowRight, Loader2, AlertTriangle, Info } from "lucide-react";
 import QuestionContainer from "@/components/form-conferencia/QuestionContainer";
 import TextQuestion from "@/components/form-conferencia/TextQuestion";
@@ -21,6 +22,8 @@ const ConferenciaCarbonoForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [resolutionMessage, setResolutionMessage] = useState<{ type: "info" | "warn" | "error"; text: string } | null>(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const variant = getVariantFromPath(location.pathname);
 
   const resolution = useOnboardingResolution();
 
@@ -144,7 +147,7 @@ const ConferenciaCarbonoForm = () => {
 
       if (error) throw error;
 
-      navigate("/conferencia-carbono/sucesso", {
+      navigate(getSuccessPath(variant), {
         state: { submissionStatus: result.status },
       });
     } catch (err) {
@@ -216,7 +219,7 @@ const ConferenciaCarbonoForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <QuestionContainer currentStep={safeStep} totalSteps={activeQuestions.length}>
+      <QuestionContainer currentStep={safeStep} totalSteps={activeQuestions.length} variant={variant}>
         <div key={safeStep}>
           {renderQuestion()}
         </div>

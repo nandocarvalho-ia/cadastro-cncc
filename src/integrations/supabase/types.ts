@@ -34,6 +34,7 @@ export type Database = {
           link_stripe: string | null
           link_whatsapp_suporte: string | null
           lista_tag: string | null
+          mensagens_sequencia_onboarding: Json | null
           moeda: string | null
           nome_oferta: string | null
           observacoes_internas: string | null
@@ -48,6 +49,8 @@ export type Database = {
           redirect_contato_link: string | null
           redirect_youtube_link: string | null
           regiao: string | null
+          template_mensagem_onboarding: string | null
+          template_mensagem_pesquisa: string | null
           tipo_oferta: string | null
           tutorial_link: string | null
           updated_at: string
@@ -71,6 +74,7 @@ export type Database = {
           link_stripe?: string | null
           link_whatsapp_suporte?: string | null
           lista_tag?: string | null
+          mensagens_sequencia_onboarding?: Json | null
           moeda?: string | null
           nome_oferta?: string | null
           observacoes_internas?: string | null
@@ -85,6 +89,8 @@ export type Database = {
           redirect_contato_link?: string | null
           redirect_youtube_link?: string | null
           regiao?: string | null
+          template_mensagem_onboarding?: string | null
+          template_mensagem_pesquisa?: string | null
           tipo_oferta?: string | null
           tutorial_link?: string | null
           updated_at?: string
@@ -108,6 +114,7 @@ export type Database = {
           link_stripe?: string | null
           link_whatsapp_suporte?: string | null
           lista_tag?: string | null
+          mensagens_sequencia_onboarding?: Json | null
           moeda?: string | null
           nome_oferta?: string | null
           observacoes_internas?: string | null
@@ -122,6 +129,8 @@ export type Database = {
           redirect_contato_link?: string | null
           redirect_youtube_link?: string | null
           regiao?: string | null
+          template_mensagem_onboarding?: string | null
+          template_mensagem_pesquisa?: string | null
           tipo_oferta?: string | null
           tutorial_link?: string | null
           updated_at?: string
@@ -346,11 +355,14 @@ export type Database = {
           ciclo_campanha_id: string | null
           criado_em: string
           data_entrada: string
+          entrou_grupo: boolean | null
+          etapa_onboarding: string | null
           id: string
           lead_id: string
           lead_nome: string | null
           lead_telefone: string | null
           oferta_id: string
+          onboarding_iniciado_em: string | null
           tipo_entrada: string
           utm_campaign: string | null
           utm_content: string | null
@@ -364,11 +376,14 @@ export type Database = {
           ciclo_campanha_id?: string | null
           criado_em?: string
           data_entrada?: string
+          entrou_grupo?: boolean | null
+          etapa_onboarding?: string | null
           id?: string
           lead_id: string
           lead_nome?: string | null
           lead_telefone?: string | null
           oferta_id: string
+          onboarding_iniciado_em?: string | null
           tipo_entrada: string
           utm_campaign?: string | null
           utm_content?: string | null
@@ -382,11 +397,14 @@ export type Database = {
           ciclo_campanha_id?: string | null
           criado_em?: string
           data_entrada?: string
+          entrou_grupo?: boolean | null
+          etapa_onboarding?: string | null
           id?: string
           lead_id?: string
           lead_nome?: string | null
           lead_telefone?: string | null
           oferta_id?: string
+          onboarding_iniciado_em?: string | null
           tipo_entrada?: string
           utm_campaign?: string | null
           utm_content?: string | null
@@ -561,8 +579,10 @@ export type Database = {
           estado: string | null
           flag_henrique_ativo: boolean
           funnel_stage: string
+          icp_classification: string | null
           id: string
           idioma_preferencial: string | null
+          indicacao_motivo: string | null
           interesse_duvida: string | null
           main_desires: string | null
           main_objections: string | null
@@ -573,7 +593,8 @@ export type Database = {
           pontuacao_mql: number
           primeiro_nome: string | null
           probabilidade_conversao: number | null
-          recebeu_link: string | null
+          produto_indicado: string | null
+          resumo_perfil: string | null
           status_relacionamento: string | null
           telefone: string
           temperatura_lead: string | null
@@ -591,8 +612,10 @@ export type Database = {
           estado?: string | null
           flag_henrique_ativo?: boolean
           funnel_stage?: string
+          icp_classification?: string | null
           id?: string
           idioma_preferencial?: string | null
+          indicacao_motivo?: string | null
           interesse_duvida?: string | null
           main_desires?: string | null
           main_objections?: string | null
@@ -603,7 +626,8 @@ export type Database = {
           pontuacao_mql?: number
           primeiro_nome?: string | null
           probabilidade_conversao?: number | null
-          recebeu_link?: string | null
+          produto_indicado?: string | null
+          resumo_perfil?: string | null
           status_relacionamento?: string | null
           telefone: string
           temperatura_lead?: string | null
@@ -621,8 +645,10 @@ export type Database = {
           estado?: string | null
           flag_henrique_ativo?: boolean
           funnel_stage?: string
+          icp_classification?: string | null
           id?: string
           idioma_preferencial?: string | null
+          indicacao_motivo?: string | null
           interesse_duvida?: string | null
           main_desires?: string | null
           main_objections?: string | null
@@ -633,7 +659,8 @@ export type Database = {
           pontuacao_mql?: number
           primeiro_nome?: string | null
           probabilidade_conversao?: number | null
-          recebeu_link?: string | null
+          produto_indicado?: string | null
+          resumo_perfil?: string | null
           status_relacionamento?: string | null
           telefone?: string
           temperatura_lead?: string | null
@@ -977,29 +1004,42 @@ export type Database = {
       onboarding_tokens: {
         Row: {
           criado_em: string
+          entrada_funil_id: string | null
           expira_em: string
           id: string
           lead_id: string
+          oferta_id: string | null
           token: string
           usado_em: string | null
         }
         Insert: {
           criado_em?: string
+          entrada_funil_id?: string | null
           expira_em?: string
           id?: string
           lead_id: string
+          oferta_id?: string | null
           token: string
           usado_em?: string | null
         }
         Update: {
           criado_em?: string
+          entrada_funil_id?: string | null
           expira_em?: string
           id?: string
           lead_id?: string
+          oferta_id?: string | null
           token?: string
           usado_em?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "onboarding_tokens_entrada_funil_id_fkey"
+            columns: ["entrada_funil_id"]
+            isOneToOne: false
+            referencedRelation: "entradas_funil"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "onboarding_tokens_lead_id_fkey"
             columns: ["lead_id"]
@@ -1014,7 +1054,41 @@ export type Database = {
             referencedRelation: "v_leads_crm"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "onboarding_tokens_oferta_id_fkey"
+            columns: ["oferta_id"]
+            isOneToOne: false
+            referencedRelation: "ofertas"
+            referencedColumns: ["id"]
+          },
         ]
+      }
+      registro_suporte: {
+        Row: {
+          created_at: string
+          id: number
+          motivo: string | null
+          nome: string | null
+          telefone: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          motivo?: string | null
+          nome?: string | null
+          telefone?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          motivo?: string | null
+          nome?: string | null
+          telefone?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       respostas_onboarding: {
         Row: {
@@ -1159,23 +1233,22 @@ export type Database = {
       vw_onboarding_respostas_amigavel: {
         Row: {
           area_atuacao: string | null
-          assunto_principal_conversa_texto: string | null
-          conhece_creditos_carbono_tempo: string | null
+          conhecimento_previo_carbono: string | null
+          data_entrada: string | null
+          dor_principal: string | null
           email: string | null
           enquadramento_profissional: string | null
           entrada_funil_id: string | null
           estado: string | null
-          expectativa_evento_texto: string | null
           faixa_etaria: string | null
-          faixa_renda_mensal: string | null
-          genero: string | null
-          ja_estudou_creditos_carbono: string | null
+          faixa_renda: string | null
+          lancamento: string | null
           lead_id: string | null
-          maior_desafio_area: string | null
-          maior_dificuldade_texto: string | null
           nome: string | null
           respondido_em: string | null
+          sexo: string | null
           telefone: string | null
+          tempo_conhece_sanquetta: string | null
         }
         Relationships: [
           {

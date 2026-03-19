@@ -1,41 +1,38 @@
 
 
-## Multi-rota com banners dinâmicos
+## Enviar telefone do lead para webhook apos formulario
 
-### Arquivos novos
-1. `src/assets/banner-protocolo.png` — imagem enviada (image-3.png)
-2. `src/assets/banner-workshop.png` — imagem enviada (image-2.png)
+### O que sera feito
 
-### Arquivos alterados
+Adicionar uma chamada ao webhook `https://n8n-n8n.frxa1g.easypanel.host/webhook/qualifica-lead-onboarding` na edge function `submit-onboarding`, disparada apos a gravacao bem-sucedida das respostas (tanto no fluxo "saved" quanto no "draft_saved").
 
-**`src/components/form-conferencia/ConferenceHeroBanner.tsx`**
-- Adicionar prop `variant?: "conferencia" | "protocolo" | "workshop"` (default `"conferencia"`)
-- Importar os 3 banners e selecionar com um map simples
+### Dados enviados ao webhook
 
-**`src/pages/ConferenciaCarbonoForm.tsx`**
-- Ler `useLocation().pathname` para determinar o variant
-- Passar `variant` ao `QuestionContainer` → `ConferenceHeroBanner`
-
-**`src/components/form-conferencia/QuestionContainer.tsx`**
-- Aceitar e repassar prop `variant` ao `ConferenceHeroBanner`
-
-**`src/pages/ConferenciaCarbonoSucesso.tsx`**
-- Ler pathname para determinar variant e passar ao banner
-
-**`src/App.tsx`**
-- Adicionar rotas:
-  - `/protocolo-definitivo` → mesmo `ConferenciaCarbonoForm`
-  - `/protocolo-definitivo/sucesso` → mesmo `ConferenciaCarbonoSucesso`
-  - `/workshop-carbono` → mesmo `ConferenciaCarbonoForm`
-  - `/workshop-carbono/sucesso` → mesmo `ConferenciaCarbonoSucesso`
-
-### Lógica de variant
-```text
-pathname contém "protocolo" → "protocolo"
-pathname contém "workshop"  → "workshop"
-default                     → "conferencia"
+```json
+{
+  "telefone": "559...",
+  "email": "x@y.com",
+  "lead_id": "uuid ou null",
+  "status": "saved" | "draft_saved",
+  "origem_vinculo": "token" | "email_fallback" | ... | null,
+  "confianca": "alta" | "media" | null
+}
 ```
 
-### O que NÃO muda
-- Perguntas, schema, validação, edge functions, Supabase, webhook, lógica de token — tudo idêntico.
+### Alteracao tecnica
+
+**Arquivo:** `supabase/functions/submit-onboarding/index.ts`
+
+1. Definir a URL do webhook como constante no topo do arquivo
+2. Criar uma funcao auxiliar `notifyWebhook()` que faz um `fetch POST` para o webhook com os dados do lead
+3. Chamar `notifyWebhook()` em dois pontos:
+   - Apos gravar com sucesso em `respostas_onboarding` (status "saved", linha ~121)
+   - Apos gravar rascunho em `onboarding_rascunhos` (status "draft_saved", linha ~144)
+4. O envio ao webhook sera fire-and-forget (nao bloqueia nem impede o retorno ao usuario em caso de falha do webhook). Erros serao logados no console mas nao afetam a resposta.
+
+### Nenhuma outra alteracao necessaria
+
+- Nao precisa de novo secret (a URL do webhook e publica)
+- Nao precisa de migration
+- Nao precisa de alteracao no frontend
 
