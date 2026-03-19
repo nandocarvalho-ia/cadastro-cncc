@@ -1,14 +1,15 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import ConferenceHeroBanner from "./ConferenceHeroBanner";
+import ConferenceHeroBanner, { type BannerVariant } from "./ConferenceHeroBanner";
 
 interface QuestionContainerProps {
   currentStep: number;
   totalSteps: number;
   children: React.ReactNode;
+  variant?: BannerVariant;
 }
 
-const QuestionContainer = ({ currentStep, totalSteps, children }: QuestionContainerProps) => {
+const QuestionContainer = ({ currentStep, totalSteps, children, variant }: QuestionContainerProps) => {
   const progress = ((currentStep + 1) / totalSteps) * 100;
 
   return (
