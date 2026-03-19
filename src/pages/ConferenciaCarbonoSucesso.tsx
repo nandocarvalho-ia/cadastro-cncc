@@ -40,7 +40,7 @@ const ConferenciaCarbonoSucesso = () => {
 
             <div className="flex flex-col gap-2 pt-1">
               <button
-                onClick={() => navigate("/conferencia-carbono")}
+                onClick={() => navigate(getFormPath(variant))}
                 className="h-[44px] px-4 rounded-xl bg-carbon-900 text-white font-bold transition-all hover:bg-carbon-800 hover:-translate-y-[0.5px] active:bg-carbon-700"
               >
                 Voltar ao início

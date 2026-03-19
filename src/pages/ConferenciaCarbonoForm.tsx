@@ -219,7 +219,7 @@ const ConferenciaCarbonoForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <QuestionContainer currentStep={safeStep} totalSteps={activeQuestions.length}>
+      <QuestionContainer currentStep={safeStep} totalSteps={activeQuestions.length} variant={variant}>
         <div key={safeStep}>
           {renderQuestion()}
         </div>

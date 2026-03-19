@@ -14,7 +14,7 @@ const QuestionContainer = ({ currentStep, totalSteps, children, variant }: Quest
 
   return (
     <div className="min-h-[100dvh] flex flex-col items-center bg-[#F6F8FB] px-4 md:px-6 py-3 md:py-4">
-      <ConferenceHeroBanner />
+      <ConferenceHeroBanner variant={variant} />
 
       <div className="w-full max-w-[980px] mx-auto flex flex-col flex-1">
         <Card className="w-full max-w-[720px] mx-auto bg-white/[0.92] backdrop-blur-[2px] border border-slate-200/80 shadow-[0_8px_30px_rgba(2,6,23,0.08)] rounded-2xl">

@@ -23,6 +23,10 @@ const App = () => (
             <Route path="/" element={<Navigate to="/conferencia-carbono" replace />} />
             <Route path="/conferencia-carbono" element={<ConferenciaCarbonoForm />} />
             <Route path="/conferencia-carbono/sucesso" element={<ConferenciaCarbonoSucesso />} />
+            <Route path="/protocolo-definitivo" element={<ConferenciaCarbonoForm />} />
+            <Route path="/protocolo-definitivo/sucesso" element={<ConferenciaCarbonoSucesso />} />
+            <Route path="/workshop-carbono" element={<ConferenciaCarbonoForm />} />
+            <Route path="/workshop-carbono/sucesso" element={<ConferenciaCarbonoSucesso />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
