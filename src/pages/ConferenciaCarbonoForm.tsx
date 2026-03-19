@@ -22,6 +22,8 @@ const ConferenciaCarbonoForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [resolutionMessage, setResolutionMessage] = useState<{ type: "info" | "warn" | "error"; text: string } | null>(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const variant = getVariantFromPath(location.pathname);
 
   const resolution = useOnboardingResolution();
 
