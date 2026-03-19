@@ -1,7 +1,8 @@
 import { useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { getVariantFromPath, getSuccessPath } from "@/lib/getVariantFromPath";
 import { ArrowLeft, ArrowRight, Loader2, AlertTriangle, Info } from "lucide-react";
 import QuestionContainer from "@/components/form-conferencia/QuestionContainer";
 import TextQuestion from "@/components/form-conferencia/TextQuestion";
