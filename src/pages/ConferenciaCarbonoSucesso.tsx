@@ -2,6 +2,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { CheckCircle2, AlertTriangle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ConferenceHeroBanner from "@/components/form-conferencia/ConferenceHeroBanner";
+import { getVariantFromPath, getFormPath } from "@/lib/getVariantFromPath";
 
 const ConferenciaCarbonoSucesso = () => {
   const navigate = useNavigate();
