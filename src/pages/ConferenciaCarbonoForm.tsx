@@ -65,7 +65,8 @@ const ConferenciaCarbonoForm = () => {
   const isAutoAdvance = question?.type === "options" || question?.type === "select";
 
   const handleIdentification = async (email: string, telefone: string) => {
-    const result = await resolution.resolveByEvento(email, telefone, resolution.eventoParam || "");
+    const rotaEvento = resolution.eventoParam || location.pathname.replace(/^\//, "") || variant || "";
+    const result = await resolution.resolveByEvento(email, telefone, rotaEvento);
     if (result && result.status === "resolved") {
       setEventoEmail(email);
       setEventoTelefone(telefone);
@@ -162,7 +163,7 @@ const ConferenciaCarbonoForm = () => {
           email: submissionEmail,
           telefone: submissionTelefone,
           respostas,
-          rota_evento: resolution.isEventoFlow ? resolution.eventoParam : undefined,
+          rota_evento: resolution.isEventoFlow ? (resolution.eventoParam || location.pathname.replace(/^\//, "")) : undefined,
         },
       });
 

@@ -18,7 +18,8 @@ export function useOnboardingResolution() {
   const [searchParams] = useSearchParams();
   const refToken = searchParams.get("ref");
   const eventoParam = searchParams.get("evento");
-  const isEventoFlow = !!eventoParam && !refToken;
+  // isEventoFlow é true sempre que não há token — o lead precisa se identificar
+  const isEventoFlow = !refToken;
 
   const [state, setState] = useState<ResolutionState>({
     status: "idle",
