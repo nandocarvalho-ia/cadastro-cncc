@@ -7,6 +7,7 @@ import { getVariantFromPath, getFormPath } from "@/lib/getVariantFromPath";
 const ConferenciaCarbonoSucesso = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const variant = getVariantFromPath(location.pathname);
   const submissionStatus = (location.state as any)?.submissionStatus as string | undefined;
   const isDraft = submissionStatus === "draft_saved";
 
