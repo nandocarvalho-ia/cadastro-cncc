@@ -9,6 +9,20 @@ const corsHeaders = {
 const VERSAO_FORMULARIO = "cncc-v2";
 const WEBHOOK_URL = "https://n8n-n8n.frxa1g.easypanel.host/webhook/qualifica-lead-onboarding";
 
+function normalizeBrazilianPhone(raw: string): string {
+  const digits = raw.replace(/\D/g, "");
+  if (digits.length === 13 && digits.startsWith("55")) return digits;
+  if (digits.length === 11) return "55" + digits;
+  if (digits.length === 10) return "55" + digits;
+  if (digits.length === 12 && digits.startsWith("55")) return digits;
+  return "55" + digits;
+}
+
+function lastEight(phone: string): string {
+  const digits = phone.replace(/\D/g, "");
+  return digits.slice(-8);
+}
+
 async function notifyWebhook(payload: {
   telefone: string | null;
   email: string;
@@ -34,7 +48,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { ref, email, telefone, respostas } = await req.json();
+    const { ref, email, telefone, respostas, rota_evento } = await req.json();
 
     if (!email || !respostas) {
       return new Response(
@@ -48,13 +62,72 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    // Re-resolver lead_id no backend (não confiar no front)
     let resolvedLeadId: string | null = null;
     let origemVinculo: string | null = null;
     let confianca: string | null = null;
 
-    // 1. Tentar por token
-    if (ref) {
+    // ──────────────────────────────────────────────
+    // FLUXO EVENTO — re-resolver pelo backend
+    // ──────────────────────────────────────────────
+    if (rota_evento && !ref && telefone) {
+      const normalizedPhone = normalizeBrazilianPhone(telefone);
+      const last8 = lastEight(normalizedPhone);
+      const emailLower = email.toLowerCase().trim();
+
+      const { data: byEmail } = await supabase
+        .from("leads")
+        .select("id, email, telefone, ultimos_8")
+        .eq("email", emailLower);
+
+      const { data: byPhone } = await supabase
+        .from("leads")
+        .select("id, email, telefone, ultimos_8")
+        .eq("ultimos_8", last8);
+
+      const mergedMap = new Map<string, any>();
+      for (const l of byEmail || []) mergedMap.set(l.id, l);
+      for (const l of byPhone || []) mergedMap.set(l.id, l);
+      const candidates = Array.from(mergedMap.values());
+
+      if (candidates.length === 1) {
+        resolvedLeadId = candidates[0].id;
+        origemVinculo = "evento_identificacao";
+        confianca = "media";
+      } else if (candidates.length > 1) {
+        const exact = candidates.filter(
+          (l: any) => l.email === emailLower && l.ultimos_8 === last8
+        );
+        if (exact.length === 1) {
+          resolvedLeadId = exact[0].id;
+          origemVinculo = "evento_identificacao";
+          confianca = "media";
+        }
+      }
+
+      // If still not found, create new lead
+      if (!resolvedLeadId) {
+        const { data: newLead, error: insertErr } = await supabase
+          .from("leads")
+          .insert({
+            email: emailLower,
+            telefone: normalizedPhone,
+            origem_principal: "formulario_manual",
+          })
+          .select("id")
+          .single();
+
+        if (!insertErr && newLead) {
+          resolvedLeadId = newLead.id;
+          origemVinculo = "evento_novo_lead";
+          confianca = "media";
+        }
+      }
+    }
+
+    // ──────────────────────────────────────────────
+    // FLUXO TOKEN — sem alteração
+    // ──────────────────────────────────────────────
+    if (!resolvedLeadId && ref) {
       const { data: tokenRow } = await supabase
         .from("onboarding_tokens")
         .select("id, lead_id, expira_em")
@@ -73,7 +146,6 @@ Deno.serve(async (req) => {
           const isExpired = tokenRow.expira_em && new Date(tokenRow.expira_em) < new Date();
           confianca = isExpired ? "media" : "alta";
 
-          // Marcar token como usado
           await supabase
             .from("onboarding_tokens")
             .update({ usado_em: new Date().toISOString() })
@@ -82,15 +154,16 @@ Deno.serve(async (req) => {
       }
     }
 
-    // 2. Fallback por email
-    if (!resolvedLeadId) {
+    // ──────────────────────────────────────────────
+    // FALLBACK POR EMAIL (fluxo original)
+    // ──────────────────────────────────────────────
+    if (!resolvedLeadId && !rota_evento) {
       const { data: leads } = await supabase
         .from("leads")
         .select("id, telefone")
         .eq("email", email.toLowerCase().trim());
 
       if (leads && leads.length > 0) {
-        // Filtrar com compra
         const leadsWithPurchase: typeof leads = [];
         for (const lead of leads) {
           const { count } = await supabase
@@ -119,7 +192,9 @@ Deno.serve(async (req) => {
       }
     }
 
-    // 3. Gravar ou salvar rascunho
+    // ──────────────────────────────────────────────
+    // GRAVAR RESPOSTAS OU RASCUNHO
+    // ──────────────────────────────────────────────
     if (resolvedLeadId && confianca) {
       const rows = Object.entries(respostas).map(([chave, valor]) => ({
         lead_id: resolvedLeadId,
@@ -147,7 +222,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Sem vínculo confiável — salvar rascunho
+    // Sem vínculo — salvar rascunho
     const { error: draftError } = await supabase
       .from("onboarding_rascunhos")
       .insert({

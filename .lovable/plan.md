@@ -1,66 +1,38 @@
 
 
-## Fluxo de identificação por `?evento=`
+## Enviar telefone do lead para webhook apos formulario
 
-### Resumo
+### O que sera feito
 
-Quando o lead chega com `?evento=` na URL (sem `?ref=`), exibir uma tela de identificação com e-mail e telefone obrigatórios antes das 13 perguntas. A edge function `resolve-onboarding` ganha uma nova branch que busca/cria o lead sem exigir compra.
+Adicionar uma chamada ao webhook `https://n8n-n8n.frxa1g.easypanel.host/webhook/qualifica-lead-onboarding` na edge function `submit-onboarding`, disparada apos a gravacao bem-sucedida das respostas (tanto no fluxo "saved" quanto no "draft_saved").
 
-### Alterações
+### Dados enviados ao webhook
 
-#### 1. Nova edge function branch em `resolve-onboarding`
+```json
+{
+  "telefone": "559...",
+  "email": "x@y.com",
+  "lead_id": "uuid ou null",
+  "status": "saved" | "draft_saved",
+  "origem_vinculo": "token" | "email_fallback" | ... | null,
+  "confianca": "alta" | "media" | null
+}
+```
 
-**Arquivo:** `supabase/functions/resolve-onboarding/index.ts`
-
-Quando o body contém `rota_evento` (e não tem `ref`):
-- Normalizar telefone para 13 dígitos (DDI 55)
-- Extrair últimos 8 dígitos do telefone
-- Buscar em `leads` por `email` OU por `ultimos_8` (match nos últimos 8 dígitos)
-- Se encontrar 1 lead: retornar `resolved` com `lead_id`, e fazer `UPDATE` para preencher email ou telefone se estiver nulo
-- Se encontrar múltiplos: tentar desempate por email+telefone combinados
-- Se não encontrar: `INSERT` novo lead com `email`, `telefone` (normalizado), `origem_principal = 'formulario_manual'` → retornar `resolved`
-- Não exige verificação de compra neste fluxo
-
-#### 2. Novo componente `IdentificationScreen`
-
-**Arquivo:** `src/components/form-conferencia/IdentificationScreen.tsx`
-
-Tela com banner + card contendo:
-- Campo e-mail (obrigatório, validação email)
-- Campo telefone (obrigatório, formato brasileiro)
-- Botão "Avançar"
-- Usa o mesmo visual do `QuestionContainer` (banner + card branco)
-
-Validação local com zod schema separado antes de chamar a edge function.
-
-#### 3. Atualizar hook `useOnboardingResolution`
-
-**Arquivo:** `src/hooks/useOnboardingResolution.ts`
-
-- Ler `?evento=` dos search params
-- Expor `eventoParam` no state
-- Adicionar método `resolveByEvento(email, telefone, rota_evento)` que chama `resolve-onboarding` com `{ email, telefone, rota_evento }`
-- Expor flag `isEventoFlow` (true quando `?evento=` existe e `?ref=` não existe)
-
-#### 4. Atualizar `ConferenciaCarbonoForm`
-
-**Arquivo:** `src/pages/ConferenciaCarbonoForm.tsx`
-
-- Adicionar state `identified` (boolean, default `false` se evento flow, `true` se ref flow)
-- Quando `!identified`: renderizar `IdentificationScreen` em vez do formulário de perguntas
-- Ao avançar da tela de identificação: chamar `resolveByEvento`, se `resolved` → setar `identified = true` e iniciar as 13 perguntas (sem a pergunta de email inline, pois já foi coletado)
-- No fluxo evento, remover as perguntas de email e telefone condicionais do activeQuestions (já coletados na tela de identificação), e pré-popular o email no form
-- No `onSubmit`, passar o `email` e `telefone` coletados na identificação
-
-#### 5. Atualizar `submit-onboarding`
+### Alteracao tecnica
 
 **Arquivo:** `supabase/functions/submit-onboarding/index.ts`
 
-- Quando recebe `rota_evento` no body (sem `ref`): usar a mesma lógica de busca por email/ultimos_8 para re-resolver o lead (não confiar no front)
-- Se não encontrar, salvar rascunho normalmente
+1. Definir a URL do webhook como constante no topo do arquivo
+2. Criar uma funcao auxiliar `notifyWebhook()` que faz um `fetch POST` para o webhook com os dados do lead
+3. Chamar `notifyWebhook()` em dois pontos:
+   - Apos gravar com sucesso em `respostas_onboarding` (status "saved", linha ~121)
+   - Apos gravar rascunho em `onboarding_rascunhos` (status "draft_saved", linha ~144)
+4. O envio ao webhook sera fire-and-forget (nao bloqueia nem impede o retorno ao usuario em caso de falha do webhook). Erros serao logados no console mas nao afetam a resposta.
 
-### O que NÃO muda
-- Fluxo `?ref=TOKEN` permanece idêntico
-- As 13 perguntas, schema, validação, webhook n8n — tudo igual
-- Rotas no `App.tsx` — sem alteração
+### Nenhuma outra alteracao necessaria
+
+- Nao precisa de novo secret (a URL do webhook e publica)
+- Nao precisa de migration
+- Nao precisa de alteracao no frontend
 

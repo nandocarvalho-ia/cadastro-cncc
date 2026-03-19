@@ -9,12 +9,16 @@ export interface ResolutionState {
   origemVinculo: string | null;
   needsPhone: boolean;
   refToken: string | null;
+  eventoParam: string | null;
+  isEventoFlow: boolean;
   error: string | null;
 }
 
 export function useOnboardingResolution() {
   const [searchParams] = useSearchParams();
   const refToken = searchParams.get("ref");
+  const eventoParam = searchParams.get("evento");
+  const isEventoFlow = !!eventoParam && !refToken;
 
   const [state, setState] = useState<ResolutionState>({
     status: "idle",
@@ -23,6 +27,8 @@ export function useOnboardingResolution() {
     origemVinculo: null,
     needsPhone: false,
     refToken,
+    eventoParam,
+    isEventoFlow,
     error: null,
   });
 
@@ -76,5 +82,30 @@ export function useOnboardingResolution() {
     [refToken]
   );
 
-  return { ...state, resolveByEmail, resolveByPhone };
+  const resolveByEvento = useCallback(
+    async (email: string, telefone: string, rota_evento: string) => {
+      setState((s) => ({ ...s, status: "resolving", error: null }));
+      try {
+        const { data, error } = await supabase.functions.invoke("resolve-onboarding", {
+          body: { email, telefone, rota_evento },
+        });
+        if (error) throw error;
+        setState((s) => ({
+          ...s,
+          status: data.status,
+          leadId: data.lead_id,
+          confianca: data.confianca,
+          origemVinculo: data.origem_vinculo,
+          needsPhone: false,
+        }));
+        return data;
+      } catch (err) {
+        setState((s) => ({ ...s, status: "idle", error: String(err) }));
+        return null;
+      }
+    },
+    []
+  );
+
+  return { ...state, resolveByEmail, resolveByPhone, resolveByEvento };
 }
