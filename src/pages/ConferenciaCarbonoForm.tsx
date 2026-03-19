@@ -9,6 +9,7 @@ import TextQuestion from "@/components/form-conferencia/TextQuestion";
 import TextareaQuestion from "@/components/form-conferencia/TextareaQuestion";
 import OptionsQuestion from "@/components/form-conferencia/OptionsQuestion";
 import SelectQuestion from "@/components/form-conferencia/SelectQuestion";
+import IdentificationScreen from "@/components/form-conferencia/IdentificationScreen";
 import {
   conferenceSchema,
   ConferenceFormData,
@@ -21,11 +22,17 @@ const ConferenciaCarbonoForm = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [resolutionMessage, setResolutionMessage] = useState<{ type: "info" | "warn" | "error"; text: string } | null>(null);
+  const [identified, setIdentified] = useState(false);
+  const [eventoEmail, setEventoEmail] = useState("");
+  const [eventoTelefone, setEventoTelefone] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
   const variant = getVariantFromPath(location.pathname);
 
   const resolution = useOnboardingResolution();
+
+  // In evento flow, user starts unidentified; in ref/direct flow, skip identification
+  const needsIdentification = resolution.isEventoFlow && !identified;
 
   const {
     register,
@@ -40,21 +47,34 @@ const ConferenciaCarbonoForm = () => {
     reValidateMode: "onChange",
   });
 
-  // Build active questions list — filter conditional questions based on resolution state
+  // Filter questions: in evento flow, skip email and telefone (already collected)
   const activeQuestions = useMemo(() => {
     return QUESTIONS.filter((q) => {
+      if (q.id === "email" && resolution.isEventoFlow) return false;
       if (q.conditional && q.id === "telefone") {
+        if (resolution.isEventoFlow) return false;
         return resolution.needsPhone;
       }
       return !q.conditional;
     });
-  }, [resolution.needsPhone]);
+  }, [resolution.needsPhone, resolution.isEventoFlow]);
 
-  // Guard: clamp currentStep within valid range (protects against stale state when activeQuestions changes)
   const safeStep = Math.min(currentStep, Math.max(0, activeQuestions.length - 1));
   const question = activeQuestions[safeStep];
   const isLastStep = safeStep === activeQuestions.length - 1;
   const isAutoAdvance = question?.type === "options" || question?.type === "select";
+
+  const handleIdentification = async (email: string, telefone: string) => {
+    const result = await resolution.resolveByEvento(email, telefone, resolution.eventoParam || "");
+    if (result && result.status === "resolved") {
+      setEventoEmail(email);
+      setEventoTelefone(telefone);
+      // Pre-fill email in form so schema validation passes
+      setValue("email", email, { shouldValidate: false });
+      setIdentified(true);
+      setCurrentStep(0);
+    }
+  };
 
   const handlePostEmailResolution = async () => {
     const email = watch("email");
@@ -70,7 +90,6 @@ const ConferenciaCarbonoForm = () => {
         type: "warn",
         text: "Não localizamos sua compra com esse e-mail. Verifique se digitou corretamente ou solicite um novo link de acesso.",
       });
-      // Não bloqueia — usuário pode voltar e tentar outro email, ou continuar
     } else if (result.status === "ambiguous") {
       setResolutionMessage({
         type: "info",
@@ -101,7 +120,6 @@ const ConferenciaCarbonoForm = () => {
     const valid = await trigger(question.id);
     if (!valid) return;
 
-    // Post-step hooks
     if (question.id === "email") {
       await handlePostEmailResolution();
     } else if (question.id === "telefone") {
@@ -133,15 +151,18 @@ const ConferenciaCarbonoForm = () => {
   const onSubmit = async (data: ConferenceFormData) => {
     setIsSubmitting(true);
     try {
-      // Build respostas object excluding telefone (metadata, not a question answer)
       const { telefone, ...respostas } = data;
+
+      const submissionEmail = resolution.isEventoFlow ? eventoEmail : data.email;
+      const submissionTelefone = resolution.isEventoFlow ? eventoTelefone : (telefone || null);
 
       const { data: result, error } = await supabase.functions.invoke("submit-onboarding", {
         body: {
           ref: resolution.refToken,
-          email: data.email,
-          telefone: telefone || null,
+          email: submissionEmail,
+          telefone: submissionTelefone,
           respostas,
+          rota_evento: resolution.isEventoFlow ? resolution.eventoParam : undefined,
         },
       });
 
@@ -160,6 +181,17 @@ const ConferenciaCarbonoForm = () => {
       setIsSubmitting(false);
     }
   };
+
+  // Show identification screen for evento flow
+  if (needsIdentification) {
+    return (
+      <IdentificationScreen
+        variant={variant}
+        isResolving={resolution.status === "resolving"}
+        onSubmit={handleIdentification}
+      />
+    );
+  }
 
   const fieldError = question ? (errors[question.id]?.message as string | undefined) : undefined;
 
