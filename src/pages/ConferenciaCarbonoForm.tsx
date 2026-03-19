@@ -147,7 +147,7 @@ const ConferenciaCarbonoForm = () => {
 
       if (error) throw error;
 
-      navigate("/conferencia-carbono/sucesso", {
+      navigate(getSuccessPath(variant), {
         state: { submissionStatus: result.status },
       });
     } catch (err) {
