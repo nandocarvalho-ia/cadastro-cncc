@@ -14,6 +14,213 @@ export type Database = {
   }
   public: {
     Tables: {
+      atendimentos_comerciais: {
+        Row: {
+          atualizado_em: string
+          criado_em: string
+          data_proxima_acao: string | null
+          encerrado_em: string | null
+          etapa_funil: string | null
+          id: string
+          iniciado_em: string
+          lead_id: string
+          observacoes: string | null
+          produto: string | null
+          proxima_acao: string | null
+          status: string
+          valor_venda: number | null
+          vendedor_id: string | null
+          vendedor_nome: string | null
+        }
+        Insert: {
+          atualizado_em?: string
+          criado_em?: string
+          data_proxima_acao?: string | null
+          encerrado_em?: string | null
+          etapa_funil?: string | null
+          id?: string
+          iniciado_em?: string
+          lead_id: string
+          observacoes?: string | null
+          produto?: string | null
+          proxima_acao?: string | null
+          status?: string
+          valor_venda?: number | null
+          vendedor_id?: string | null
+          vendedor_nome?: string | null
+        }
+        Update: {
+          atualizado_em?: string
+          criado_em?: string
+          data_proxima_acao?: string | null
+          encerrado_em?: string | null
+          etapa_funil?: string | null
+          id?: string
+          iniciado_em?: string
+          lead_id?: string
+          observacoes?: string | null
+          produto?: string | null
+          proxima_acao?: string | null
+          status?: string
+          valor_venda?: number | null
+          vendedor_id?: string | null
+          vendedor_nome?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "atendimentos_comerciais_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "atendimentos_comerciais_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "v_leads_crm"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      base_fria_leads: {
+        Row: {
+          email: string | null
+          excluido: boolean
+          id: string
+          importado_em: string
+          importado_para_leads: boolean
+          lancamento: string
+          nome: string | null
+          sobrenome: string | null
+          telefone: string | null
+          ultimos_8: string | null
+        }
+        Insert: {
+          email?: string | null
+          excluido?: boolean
+          id?: string
+          importado_em?: string
+          importado_para_leads?: boolean
+          lancamento: string
+          nome?: string | null
+          sobrenome?: string | null
+          telefone?: string | null
+          ultimos_8?: string | null
+        }
+        Update: {
+          email?: string | null
+          excluido?: boolean
+          id?: string
+          importado_em?: string
+          importado_para_leads?: boolean
+          lancamento?: string
+          nome?: string | null
+          sobrenome?: string | null
+          telefone?: string | null
+          ultimos_8?: string | null
+        }
+        Relationships: []
+      }
+      blocklist_disparos: {
+        Row: {
+          criado_em: string | null
+          email: string | null
+          id: string
+          motivo: string | null
+          telefone: string | null
+          ultimos_8: string | null
+        }
+        Insert: {
+          criado_em?: string | null
+          email?: string | null
+          id?: string
+          motivo?: string | null
+          telefone?: string | null
+          ultimos_8?: string | null
+        }
+        Update: {
+          criado_em?: string | null
+          email?: string | null
+          id?: string
+          motivo?: string | null
+          telefone?: string | null
+          ultimos_8?: string | null
+        }
+        Relationships: []
+      }
+      campanhas_disparo: {
+        Row: {
+          agendado_para: string | null
+          atualizado_em: string
+          concluido_em: string | null
+          contexto_msg: string | null
+          criado_em: string
+          criado_por: string | null
+          id: string
+          iniciado_em: string | null
+          lancamento_alvo: string
+          nome: string
+          status: string
+          templates_selecionados: Json | null
+          texto_1: string | null
+          texto_2: string | null
+          texto_3: string | null
+          texto_4: string | null
+          texto_5: string | null
+          total_enviados: number | null
+          total_erros: number | null
+          total_leads: number | null
+          total_responderam: number | null
+        }
+        Insert: {
+          agendado_para?: string | null
+          atualizado_em?: string
+          concluido_em?: string | null
+          contexto_msg?: string | null
+          criado_em?: string
+          criado_por?: string | null
+          id?: string
+          iniciado_em?: string | null
+          lancamento_alvo: string
+          nome: string
+          status?: string
+          templates_selecionados?: Json | null
+          texto_1?: string | null
+          texto_2?: string | null
+          texto_3?: string | null
+          texto_4?: string | null
+          texto_5?: string | null
+          total_enviados?: number | null
+          total_erros?: number | null
+          total_leads?: number | null
+          total_responderam?: number | null
+        }
+        Update: {
+          agendado_para?: string | null
+          atualizado_em?: string
+          concluido_em?: string | null
+          contexto_msg?: string | null
+          criado_em?: string
+          criado_por?: string | null
+          id?: string
+          iniciado_em?: string | null
+          lancamento_alvo?: string
+          nome?: string
+          status?: string
+          templates_selecionados?: Json | null
+          texto_1?: string | null
+          texto_2?: string | null
+          texto_3?: string | null
+          texto_4?: string | null
+          texto_5?: string | null
+          total_enviados?: number | null
+          total_erros?: number | null
+          total_leads?: number | null
+          total_responderam?: number | null
+        }
+        Relationships: []
+      }
       catalogo_ofertas_henrique: {
         Row: {
           ativo: boolean | null
@@ -23,6 +230,7 @@ export type Database = {
           ficha_aluno_link: string | null
           fim_publicacao: string | null
           grupo_whatsapp: string | null
+          grupo_whatsapp_direto: string | null
           id: number
           idioma: string | null
           inicio_publicacao: string | null
@@ -49,6 +257,7 @@ export type Database = {
           redirect_contato_link: string | null
           redirect_youtube_link: string | null
           regiao: string | null
+          tag_campanha: string | null
           template_mensagem_onboarding: string | null
           template_mensagem_pesquisa: string | null
           tipo_oferta: string | null
@@ -63,6 +272,7 @@ export type Database = {
           ficha_aluno_link?: string | null
           fim_publicacao?: string | null
           grupo_whatsapp?: string | null
+          grupo_whatsapp_direto?: string | null
           id?: number
           idioma?: string | null
           inicio_publicacao?: string | null
@@ -89,6 +299,7 @@ export type Database = {
           redirect_contato_link?: string | null
           redirect_youtube_link?: string | null
           regiao?: string | null
+          tag_campanha?: string | null
           template_mensagem_onboarding?: string | null
           template_mensagem_pesquisa?: string | null
           tipo_oferta?: string | null
@@ -103,6 +314,7 @@ export type Database = {
           ficha_aluno_link?: string | null
           fim_publicacao?: string | null
           grupo_whatsapp?: string | null
+          grupo_whatsapp_direto?: string | null
           id?: number
           idioma?: string | null
           inicio_publicacao?: string | null
@@ -129,6 +341,7 @@ export type Database = {
           redirect_contato_link?: string | null
           redirect_youtube_link?: string | null
           regiao?: string | null
+          tag_campanha?: string | null
           template_mensagem_onboarding?: string | null
           template_mensagem_pesquisa?: string | null
           tipo_oferta?: string | null
@@ -344,6 +557,109 @@ export type Database = {
             columns: ["oferta_id"]
             isOneToOne: false
             referencedRelation: "ofertas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      disparos_campanha: {
+        Row: {
+          campanha: string
+          campanha_id: string | null
+          contexto_disparo: string | null
+          contexto_injetado: boolean | null
+          convertido: boolean
+          convertido_em: string | null
+          convertido_por: string | null
+          created_at: string
+          encaminhado_em: string | null
+          encaminhado_vendedora: boolean
+          id: string
+          lead_id: string | null
+          lista: string
+          nome_lead: string | null
+          optout: boolean
+          optout_em: string | null
+          primeira_tentativa_em: string | null
+          respondeu: boolean
+          respondeu_em: string | null
+          segunda_tentativa_em: string | null
+          status: string
+          telefone: string
+          texto_enviado: string | null
+          updated_at: string
+        }
+        Insert: {
+          campanha: string
+          campanha_id?: string | null
+          contexto_disparo?: string | null
+          contexto_injetado?: boolean | null
+          convertido?: boolean
+          convertido_em?: string | null
+          convertido_por?: string | null
+          created_at?: string
+          encaminhado_em?: string | null
+          encaminhado_vendedora?: boolean
+          id?: string
+          lead_id?: string | null
+          lista: string
+          nome_lead?: string | null
+          optout?: boolean
+          optout_em?: string | null
+          primeira_tentativa_em?: string | null
+          respondeu?: boolean
+          respondeu_em?: string | null
+          segunda_tentativa_em?: string | null
+          status?: string
+          telefone: string
+          texto_enviado?: string | null
+          updated_at?: string
+        }
+        Update: {
+          campanha?: string
+          campanha_id?: string | null
+          contexto_disparo?: string | null
+          contexto_injetado?: boolean | null
+          convertido?: boolean
+          convertido_em?: string | null
+          convertido_por?: string | null
+          created_at?: string
+          encaminhado_em?: string | null
+          encaminhado_vendedora?: boolean
+          id?: string
+          lead_id?: string | null
+          lista?: string
+          nome_lead?: string | null
+          optout?: boolean
+          optout_em?: string | null
+          primeira_tentativa_em?: string | null
+          respondeu?: boolean
+          respondeu_em?: string | null
+          segunda_tentativa_em?: string | null
+          status?: string
+          telefone?: string
+          texto_enviado?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "disparos_campanha_campanha_id_fkey"
+            columns: ["campanha_id"]
+            isOneToOne: false
+            referencedRelation: "campanhas_disparo"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "disparos_campanha_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "disparos_campanha_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "v_leads_crm"
             referencedColumns: ["id"]
           },
         ]
@@ -570,11 +886,14 @@ export type Database = {
       leads: {
         Row: {
           acao_sugerida: string | null
+          atendimento_id: string | null
           atualizado_em: string
           cidade: string | null
+          contexto_disparo: string | null
           criado_em: string
           data_primeira_entrada: string | null
           data_ultima_interacao: string | null
+          em_atendimento_humano: boolean
           email: string | null
           estado: string | null
           flag_henrique_ativo: boolean
@@ -584,9 +903,12 @@ export type Database = {
           idioma_preferencial: string | null
           indicacao_motivo: string | null
           interesse_duvida: string | null
+          lifecycle_stage: string
+          lista_origem: string | null
           main_desires: string | null
           main_objections: string | null
           main_pain_points: string | null
+          motivo_perda: string | null
           nao_contatar: boolean
           nome_completo: string | null
           origem_principal: string | null
@@ -603,11 +925,14 @@ export type Database = {
         }
         Insert: {
           acao_sugerida?: string | null
+          atendimento_id?: string | null
           atualizado_em?: string
           cidade?: string | null
+          contexto_disparo?: string | null
           criado_em?: string
           data_primeira_entrada?: string | null
           data_ultima_interacao?: string | null
+          em_atendimento_humano?: boolean
           email?: string | null
           estado?: string | null
           flag_henrique_ativo?: boolean
@@ -617,9 +942,12 @@ export type Database = {
           idioma_preferencial?: string | null
           indicacao_motivo?: string | null
           interesse_duvida?: string | null
+          lifecycle_stage?: string
+          lista_origem?: string | null
           main_desires?: string | null
           main_objections?: string | null
           main_pain_points?: string | null
+          motivo_perda?: string | null
           nao_contatar?: boolean
           nome_completo?: string | null
           origem_principal?: string | null
@@ -636,11 +964,14 @@ export type Database = {
         }
         Update: {
           acao_sugerida?: string | null
+          atendimento_id?: string | null
           atualizado_em?: string
           cidade?: string | null
+          contexto_disparo?: string | null
           criado_em?: string
           data_primeira_entrada?: string | null
           data_ultima_interacao?: string | null
+          em_atendimento_humano?: boolean
           email?: string | null
           estado?: string | null
           flag_henrique_ativo?: boolean
@@ -650,9 +981,12 @@ export type Database = {
           idioma_preferencial?: string | null
           indicacao_motivo?: string | null
           interesse_duvida?: string | null
+          lifecycle_stage?: string
+          lista_origem?: string | null
           main_desires?: string | null
           main_objections?: string | null
           main_pain_points?: string | null
+          motivo_perda?: string | null
           nao_contatar?: boolean
           nome_completo?: string | null
           origem_principal?: string | null
@@ -667,7 +1001,15 @@ export type Database = {
           ultimos_8?: string | null
           user_profile?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "leads_atendimento_id_fkey"
+            columns: ["atendimento_id"]
+            isOneToOne: false
+            referencedRelation: "atendimentos_comerciais"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       leads_LC_JAN26: {
         Row: {
@@ -910,6 +1252,27 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      n8n_chat_api_oficial: {
+        Row: {
+          id: number
+          message: Json
+          session_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          id?: number
+          message: Json
+          session_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          id?: number
+          message?: Json
+          session_id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       n8n_chat_unificado: {
         Row: {
@@ -1208,6 +1571,45 @@ export type Database = {
           },
         ]
       }
+      templates_whatsapp: {
+        Row: {
+          ativo: boolean | null
+          atualizado_em: string | null
+          categoria: string | null
+          corpo_preview: string | null
+          criado_em: string | null
+          descricao: string | null
+          id: string
+          idioma: string | null
+          nome_template: string
+          variaveis: Json | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          atualizado_em?: string | null
+          categoria?: string | null
+          corpo_preview?: string | null
+          criado_em?: string | null
+          descricao?: string | null
+          id?: string
+          idioma?: string | null
+          nome_template: string
+          variaveis?: Json | null
+        }
+        Update: {
+          ativo?: boolean | null
+          atualizado_em?: string | null
+          categoria?: string | null
+          corpo_preview?: string | null
+          criado_em?: string | null
+          descricao?: string | null
+          id?: string
+          idioma?: string | null
+          nome_template?: string
+          variaveis?: Json | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       v_leads_crm: {
@@ -1233,6 +1635,7 @@ export type Database = {
       vw_onboarding_respostas_amigavel: {
         Row: {
           area_atuacao: string | null
+          campanha: string | null
           conhecimento_previo_carbono: string | null
           data_entrada: string | null
           dor_principal: string | null
